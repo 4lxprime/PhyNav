@@ -1,5 +1,4 @@
 from tkinter import *
-from turtle import color
 from tkhtmlview import *
 import requests
 import time
@@ -66,11 +65,6 @@ def act_title():
 ttl=threading.Thread(target=act_title)
 ttl.setDaemon(True)
 ttl.start()
-
-menubar=Menu(root)
-filemenu=Menu(menubar)
-filemenu.add_cascade(label="File", menu=menubar)
-filemenu.add_command(label="Open", command=lambda: print("test"))
 
 canvas=Canvas(root, bg="#23272e", width=800, height=500)
 
@@ -161,7 +155,6 @@ t.start()
 print(canvas.winfo_width())
 
 root.bind('<Return>', search)
-root.config(menu=menubar)
 canvas.pack(expand=True, fill="both")
 root.protocol("WM_DELETE_WINDOW", stop)
 root.mainloop()
