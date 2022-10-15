@@ -5,7 +5,7 @@ an 100% python navigator with a tab system
 
 ## GUI
 
-I use ([tkinter](https://docs.python.org/fr/3/library/tkinter.html)) for the gui interface.
+I use [tkinter](https://docs.python.org/fr/3/library/tkinter.html) for the gui interface.
 
 ```python
 root=Tk()
@@ -22,7 +22,7 @@ root.mainloop()
 
 ## How it work ?
 
-I can display the html with ([tkhtmlview](https://github.com/bauripalash/tkhtmlview)) and I use ([bs4](https://github.com/wention/BeautifulSoup4)) for delete script
+I can display the html with [tkhtmlview](https://github.com/bauripalash/tkhtmlview) and I use [bs4](https://github.com/wention/BeautifulSoup4) for delete script
 
 That is the code that I use for get the html and display it:
 
