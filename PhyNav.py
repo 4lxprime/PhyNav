@@ -1,9 +1,8 @@
 from tkinter import *
-from tkhtmlview import *
+from tkinterweb import *
 import requests
 import time
 import threading
-from bs4 import BeautifulSoup
 
 pages=[]
 n=[]
@@ -19,21 +18,15 @@ def gets(url, name):
     'From': 'idalxprime@gmail.com',
     'Cookie':'CONSENT=YES+cb.20210418-17-p0.it+FX+917; '
 }
-    canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+    htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>")
     try:
         r=requests.get(url, headers=headers)
         if r.status_code==200:
-            soup=BeautifulSoup(r.content, "html.parser")
-            for data in soup(['script']):
-                data.decompose()
-            r= ' '.join(soup.stripped_strings)
-            print(r)
-            canvas.itemconfigure(HPage, window=HTMLScrolledText(root, html=f"<div style='background: #23272e; color: white;'>{r}</div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
-            pages.append(name)
+            htmlFR.load_website(url)
         else:
-            canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Error {r.status_code}</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+            htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Error {r.status_code}</h1></div>")
     except Exception as e:
-        canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Error: {e}</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+        htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Error: {e}</h1></div>")
 
 def search(x):
     url=urle.get()
@@ -77,15 +70,9 @@ root.update()
 urle=Entry(root, font=("Arial", 20), relief="flat", borderwidth=0, bg="#1e2227", width=38, highlightthickness=1, highlightbackground='black', fg="white")
 UrlInput=canvas.create_window(root.winfo_width()/2 , 40, window=urle)
 
-htmlP=HTMLScrolledText(root, html="""
-<div style='background: #23272e; color: white; text-align: center;'>
-<br>
-<h1>PhyNav</h1>
-<p>Welcome to PhyNav !</p>
-<p>Click <a href="https://github.com/4lxprime/PhyNav">here</a> for the doc.</p>
-</div>
-""", background="#1e2227", highlightthickness=1, highlightbackground='black')
-HPage=canvas.create_window(2, 80, anchor="nw", window=htmlP, width=root.winfo_width()-5, height=root.winfo_height()-82)
+htmlFR=HtmlFrame(root)
+htmlFR.load_website("https://google.com")
+HPage=canvas.create_window(2, 80, anchor="nw", window=htmlFR, width=root.winfo_width()-5, height=root.winfo_height()-82)
 
 def butt_press(x):
     print(x)

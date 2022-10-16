@@ -22,7 +22,7 @@ root.mainloop()
 
 ## How it work ?
 
-I can display the html with [tkhtmlview](https://github.com/bauripalash/tkhtmlview) and I use [bs4](https://github.com/wention/BeautifulSoup4) for delete script
+I can display the html with [tkinterweb](https://github.com/Andereoo/TkinterWeb) and I use [bs4](https://github.com/wention/BeautifulSoup4) for delete script
 
 That is the code that I use for get the html and display it:
 
