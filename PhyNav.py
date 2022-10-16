@@ -6,6 +6,7 @@ import threading
 from bs4 import BeautifulSoup
 
 pages=[]
+n=[]
 
 def stop():
     root.destroy()
@@ -17,7 +18,7 @@ def gets(url, name):
     'From': 'idalxprime@gmail.com',
     'Cookie':'CONSENT=YES+cb.20210418-17-p0.it+FX+917; '
 }
-    canvas.itemconfigure(HPage, window=HTMLLabel(root, html="<div style='background: #23272e; color: white; text-align: center;'><br><h1>Waiting ...</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+    canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
     try:
         r=requests.get(url, headers=headers)
         if r.status_code==200:
@@ -111,16 +112,27 @@ def ong_save():
     while 1:
         for i in pages:
             if i.startswith("|ok|"):
-                canvas.coords(globals()[f'ongl'+i.replace("|ok|", "")], canvas.coords(globals()[f'ongl'+i.replace("|ok|", "")])[0], root.winfo_height()-42, canvas.coords(globals()[f'ongl'+i.replace("|ok|", "")])[2], root.winfo_height())
-                canvas.coords(globals()[f'onglT'+i.replace("|ok|", "")], canvas.coords(globals()[f'onglT'+i.replace("|ok|", "")])[0], root.winfo_height()-22)
+                i=i.replace("|ok|", "")
+                canvas.coords(globals()[f'ongl'+i], canvas.coords(globals()[f'ongl'+i])[0], root.winfo_height()-41)
+                canvas.coords(globals()[f'onglcrx'+i], canvas.coords(globals()[f'onglcrx'+i])[0], root.winfo_height()-41)
         time.sleep(0.1)
 
 t=threading.Thread(target=ong_save)
 t.setDaemon(True)
 t.start()
 
+def check_ong():
+    pass
+
+def ong_kill(ong):
+    for i in pages:
+        if i==f"|ok|{ong}":
+            pages.remove(i)
+            canvas.delete(globals()[f'ongl'+ong])
+            canvas.delete(globals()[f'onglcrx'+ong])
+            n.remove("x")
+
 def ong():
-    n=[]
     while 1:
         for i in pages:
             if i.startswith("|ok|"):
@@ -141,10 +153,13 @@ def ong():
                     pass
                 x=172*len(n)
                 print(i)
-                # globals()[f'ong'+i]=Button(root, text=i, font=("Arial", 15), bg="#1c1c1c", command=lambda m=f"{i}": butt_press(m), width=15, height=1)
-                # globals()[f'ongl'+i]=canvas.create_window(2+x, root.winfo_height()-42, anchor="nw", window=globals()[f'ong'+i])
-                globals()[f'ongl'+i]=canvas.create_rectangle(2+x, root.winfo_height()-43, 172+x, root.winfo_height(), outline="black", fill="#1c1c1c")
-                globals()[f'onglT'+i]=canvas.create_text(80+x, root.winfo_height()-22, text=i, font=("Arial", 15), width=210, fill="white")
+                globals()[f'ong'+i]=Button(root, text=i, font=("Arial", 15), bg="#1c1c1c", fg="white", command=lambda m=f"{i}": butt_press(m), width=15, height=1, relief="flat", borderwidth=0)
+                globals()[f'ongl'+i]=canvas.create_window(2+x, root.winfo_height()-42, anchor="nw", window=globals()[f'ong'+i])
+
+                globals()[f'ongcrx'+i]=Button(root, text="X", font=("Arial", 15), bg="#1c1c1c", command=lambda m=f"{i}": ong_kill(m), width=3, height=1, relief="flat", borderwidth=0, fg="white")
+                globals()[f'onglcrx'+i]=canvas.create_window(134+x, root.winfo_height()-42, anchor="nw", window=globals()[f'ongcrx'+i])
+                # globals()[f'ongl'+i]=canvas.create_rectangle(2+x, root.winfo_height()-43, 172+x, root.winfo_height(), outline="black", fill="#1c1c1c")
+                # globals()[f'onglT'+i]=canvas.create_text(80+x, root.winfo_height()-22, text=i, font=("Arial", 15), width=210, fill="white")
                 pages.remove(i)
                 pages.append(f"|ok|{i}")
                 n.append("x")
@@ -162,25 +177,6 @@ def act():
         
     
 t=threading.Thread(target=act)
-t.setDaemon(True)
-t.start()
-
-print(canvas.winfo_width())
-
-def on_enter():
-    print("enter in ")
-
-def on_leave(i):
-    print("leave in "+i)
-
-def act_nav():
-    while 1:
-        for i in pages:
-            if i.startswith("|ok|"):
-                canvas.tag_bind(globals()[f'ongl'+i], "<Button-1>", on_enter)
-        time.sleep(0.1)
-
-t=threading.Thread(target=act_nav)
 t.setDaemon(True)
 t.start()
 
