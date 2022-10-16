@@ -19,6 +19,7 @@ def gets(url, name):
     'Cookie':'CONSENT=YES+cb.20210418-17-p0.it+FX+917; '
 }
     htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>")
+    pages.append(name)
     try:
         r=requests.get(url, headers=headers)
         if r.status_code==200:
