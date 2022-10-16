@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 pages=[]
 n=[]
+ong_del=[]
 
 def stop():
     root.destroy()
@@ -110,19 +111,28 @@ def butt_press(x):
 
 def ong_save():
     while 1:
-        for i in pages:
-            if i.startswith("|ok|"):
-                i=i.replace("|ok|", "")
-                canvas.coords(globals()[f'ongl'+i], canvas.coords(globals()[f'ongl'+i])[0], root.winfo_height()-41)
-                canvas.coords(globals()[f'onglcrx'+i], canvas.coords(globals()[f'onglcrx'+i])[0], root.winfo_height()-41)
+        if len(ong_del)!=0:
+            for i in pages:
+                if i.startswith("|ok|"):
+                    i=i.replace("|ok|", "")
+                    if canvas.coords(globals()[f'ongl'+i])[0]==2:
+                        canvas.coords(globals()[f'ongl'+i], canvas.coords(globals()[f'ongl'+i])[0], root.winfo_height()-41)
+                        canvas.coords(globals()[f'onglcrx'+i], canvas.coords(globals()[f'onglcrx'+i])[0], root.winfo_height()-41)
+                    else:
+                        canvas.coords(globals()[f'ongl'+i], canvas.coords(globals()[f'ongl'+i])[0]-172, root.winfo_height()-41)
+                        canvas.coords(globals()[f'onglcrx'+i], canvas.coords(globals()[f'onglcrx'+i])[0]-172, root.winfo_height()-41)
+            ong_del.remove("x")
+        else:
+            for i in pages:
+                if i.startswith("|ok|"):
+                    i=i.replace("|ok|", "")
+                    canvas.coords(globals()[f'ongl'+i], canvas.coords(globals()[f'ongl'+i])[0], root.winfo_height()-41)
+                    canvas.coords(globals()[f'onglcrx'+i], canvas.coords(globals()[f'onglcrx'+i])[0], root.winfo_height()-41)
         time.sleep(0.1)
 
 t=threading.Thread(target=ong_save)
 t.setDaemon(True)
 t.start()
-
-def check_ong():
-    pass
 
 def ong_kill(ong):
     for i in pages:
@@ -131,6 +141,7 @@ def ong_kill(ong):
             canvas.delete(globals()[f'ongl'+ong])
             canvas.delete(globals()[f'onglcrx'+ong])
             n.remove("x")
+            ong_del.append("x")
 
 def ong():
     while 1:
