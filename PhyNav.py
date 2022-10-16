@@ -7,6 +7,7 @@ import threading
 pages=[]
 n=[]
 ong_del=[]
+actual_page=[]
 
 def stop():
     root.destroy()
@@ -23,7 +24,11 @@ def gets(url, name):
     try:
         r=requests.get(url, headers=headers)
         if r.status_code==200:
-            htmlFR.load_website(url)
+            htmlFR.load_website(url, force=True)
+            while actual_page!=[]:
+                for i in actual_page:
+                    actual_page.remove(i)
+            actual_page.append(name)
         else:
             htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Error {r.status_code}</h1></div>")
     except Exception as e:
@@ -47,15 +52,23 @@ def search(x):
         root.update()
         print(canvas.winfo_width()-1)
 
+def update_title(title):
+    urle.delete(0, END)
+    urle.insert(0, title)
+
 root=Tk()
 
 root.geometry("800x500")
-root.minsize(600, 300)
+root.minsize(800, 400)
 root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}")
 
 def act_title():
     while 1:
-        root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}")
+        if len(actual_page)!=1:
+            root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}")
+        else:
+            for i in actual_page:
+                root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}  |  {i}")
         time.sleep(1)
 
 ttl=threading.Thread(target=act_title)
@@ -71,9 +84,15 @@ root.update()
 urle=Entry(root, font=("Arial", 20), relief="flat", borderwidth=0, bg="#1e2227", width=38, highlightthickness=1, highlightbackground='black', fg="white")
 UrlInput=canvas.create_window(root.winfo_width()/2 , 40, window=urle)
 
+plusZBtn=Button(root, text="+", font=("Arial", 15), bg="#1c1c1c", command=lambda: htmlFR.set_zoom(htmlFR.get_zoom()+1), width=3, height=1, relief="flat", borderwidth=0, fg="#6b6a6a", activebackground="#3e4552")
+plusZ=canvas.create_window(root.winfo_width()/2-320, 40, window=plusZBtn)
+plusUZBtn=Button(root, text="-", font=("Arial", 15), bg="#1c1c1c", command=lambda: htmlFR.set_zoom(htmlFR.get_zoom()-1), width=3, height=1, relief="flat", borderwidth=0, fg="#6b6a6a", activebackground="#3e4552")
+plusUZ=canvas.create_window(root.winfo_width()/2-370, 40, window=plusUZBtn)
+
 htmlFR=HtmlFrame(root)
 htmlFR.load_website("https://google.com")
 HPage=canvas.create_window(2, 80, anchor="nw", window=htmlFR, width=root.winfo_width()-5, height=root.winfo_height()-82)
+htmlFR.on_title_change(update_title)
 
 def butt_press(x):
     print(x)
@@ -130,6 +149,31 @@ def ong_kill(ong):
             canvas.delete(globals()[f'onglcrx'+ong])
             n.remove("x")
             ong_del.append("x")
+            for actp in actual_page:
+                print(actp)
+                if ong==actp:
+                    x=pages[-1].replace("|ok|", "")
+                    print(x)
+                    for i in pages:
+                        if i==f"|ok|{x}":
+                            url=x
+                            print(url)
+                            if url!="" and "http" in url:
+                                print(url)
+                                threading.Thread(target=gets, args=(url, url.replace("https://", ""))).start()
+                            elif not "http" in url:
+                                if "." in url:
+                                    url=f"https://{url}"
+                                    threading.Thread(target=gets, args=(url, url.replace("https://", ""))).start()
+                                else:
+                                    if " " in url:
+                                        url.replace(" ", "%20")
+                                    url=f"https://www.google.com/search?q={url}"
+                                    threading.Thread(target=gets, args=(url, url.replace("https://www.google.com/search?q=", "").replace("%20", " "))).start()
+                            else:
+                                root.update()
+                else:
+                    pass
 
 def ong():
     while 1:
@@ -152,10 +196,10 @@ def ong():
                     pass
                 x=172*len(n)
                 print(i)
-                globals()[f'ong'+i]=Button(root, text=i, font=("Arial", 15), bg="#1c1c1c", fg="white", command=lambda m=f"{i}": butt_press(m), width=15, height=1, relief="flat", borderwidth=0)
+                globals()[f'ong'+i]=Button(root, text=i, font=("Arial", 15), bg="#1c1c1c", fg="white", command=lambda m=f"{i}": butt_press(m), width=15, height=1, relief="flat", borderwidth=0, activebackground="#3e4552")
                 globals()[f'ongl'+i]=canvas.create_window(2+x, root.winfo_height()-42, anchor="nw", window=globals()[f'ong'+i])
 
-                globals()[f'ongcrx'+i]=Button(root, text="X", font=("Arial", 15), bg="#1c1c1c", command=lambda m=f"{i}": ong_kill(m), width=3, height=1, relief="flat", borderwidth=0, fg="white")
+                globals()[f'ongcrx'+i]=Button(root, text="X", font=("Arial", 15), bg="#1c1c1c", command=lambda m=f"{i}": ong_kill(m), width=3, height=1, relief="flat", borderwidth=0, fg="#6b6a6a", activebackground="#3e4552")
                 globals()[f'onglcrx'+i]=canvas.create_window(134+x, root.winfo_height()-42, anchor="nw", window=globals()[f'ongcrx'+i])
                 # globals()[f'ongl'+i]=canvas.create_rectangle(2+x, root.winfo_height()-43, 172+x, root.winfo_height(), outline="black", fill="#1c1c1c")
                 # globals()[f'onglT'+i]=canvas.create_text(80+x, root.winfo_height()-22, text=i, font=("Arial", 15), width=210, fill="white")
@@ -173,6 +217,8 @@ def act():
         root.update()
         canvas.itemconfigure(HPage, width=root.winfo_width()-5, height=root.winfo_height()-122)
         canvas.coords(UrlInput, root.winfo_width()/2, 40)
+        canvas.coords(plusZ, root.winfo_width()/2-320, 40)
+        canvas.coords(plusUZ, root.winfo_width()/2-370, 40)
         
     
 t=threading.Thread(target=act)
