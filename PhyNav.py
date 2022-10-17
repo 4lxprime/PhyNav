@@ -13,6 +13,32 @@ def stop():
     root.destroy()
     exit(0)
 
+def app_time():
+    if btnJB['text']=="light":
+        btnJB['text']="dark"
+        canvas.itemconfigure(top, fill="#1c1c1c")
+        canvas.configure(bg="#23272e")
+        plusZBtn.configure(bg="#1c1c1c", fg="#6b6a6a")
+        plusUZBtn.configure(bg="#1c1c1c", fg="#6b6a6a")
+        btnJB.configure(bg="#1c1c1c", fg="#6b6a6a")
+        for i in pages:
+            if i.startswith("|ok|"):
+                i=i.replace("|ok|", "")
+                globals()[f'ong'+i].configure(bg="#1c1c1c", fg="#6b6a6a")
+                globals()[f'ongcrx'+i].configure(bg="#1c1c1c", fg="#6b6a6a")
+    else:
+        btnJB['text']="light"
+        canvas.itemconfigure(top, fill="#c9c9c9")
+        canvas.configure(bg="#d6d4d4")
+        plusZBtn.configure(bg="#c9c9c9", fg="black")
+        plusUZBtn.configure(bg="#c9c9c9", fg="black")
+        btnJB.configure(bg="#c9c9c9", fg="black")
+        for i in pages:
+            if i.startswith("|ok|"):
+                i=i.replace("|ok|", "")
+                globals()[f'ong'+i].configure(bg="#c9c9c9", fg="black")
+                globals()[f'ongcrx'+i].configure(bg="#c9c9c9", fg="black")
+
 def gets(url, name):
     headers = {
     'User-Agent': 'PhySearch 1.0',
@@ -77,7 +103,7 @@ ttl.start()
 
 canvas=Canvas(root, bg="#23272e", width=800, height=500)
 
-canvas.create_rectangle(0, 0, root.maxsize()[0], 80, outline="black", fill="#1c1c1c")
+top=canvas.create_rectangle(0, 0, root.maxsize()[0], 80, outline="black", fill="#1c1c1c")
 
 root.update()
 
@@ -88,6 +114,9 @@ plusZBtn=Button(root, text="+", font=("Arial", 15), bg="#1c1c1c", command=lambda
 plusZ=canvas.create_window(root.winfo_width()/2-320, 40, window=plusZBtn)
 plusUZBtn=Button(root, text="-", font=("Arial", 15), bg="#1c1c1c", command=lambda: htmlFR.set_zoom(htmlFR.get_zoom()-1), width=3, height=1, relief="flat", borderwidth=0, fg="#6b6a6a", activebackground="#3e4552")
 plusUZ=canvas.create_window(root.winfo_width()/2-370, 40, window=plusUZBtn)
+
+btnJB=Button(root, text="dark", font=("Arial", 15), bg="#1c1c1c", command=app_time, width=4, height=1, relief="flat", borderwidth=0, fg="#6b6a6a", activebackground="#3e4552")
+btnJ=canvas.create_window(root.winfo_width()/2+320, 40, window=btnJB)
 
 htmlFR=HtmlFrame(root)
 htmlFR.load_website("https://google.com")
