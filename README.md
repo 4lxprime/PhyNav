@@ -33,21 +33,20 @@ def gets(url, name):
     'From': 'idalxprime@gmail.com',
     'Cookie':'CONSENT=YES+cb.20210418-17-p0.it+FX+917; '
 }
-    canvas.itemconfigure(HPage, window=HTMLLabel(root, html="<div style='background: #23272e; color: white; text-align: center;'><br><h1>Waiting ...</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+    htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>")
+    pages.append(name)
     try:
         r=requests.get(url, headers=headers)
         if r.status_code==200:
-            soup=BeautifulSoup(r.content, "html.parser")
-            for data in soup(['script']):
-                data.decompose()
-            r= ' '.join(soup.stripped_strings)
-            print(r)
-            canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white;'>{r}</div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
-            pages.append(name)
+            htmlFR.load_website(url, force=True)
+            while actual_page!=[]:
+                for i in actual_page:
+                    actual_page.remove(i)
+            actual_page.append(name)
         else:
-            canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Error {r.status_code}</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+            htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Error {r.status_code}</h1></div>")
     except Exception as e:
-        canvas.itemconfigure(HPage, window=HTMLLabel(root, html=f"<div style='background: #23272e; color: white; text-align: center;'><br><h1>Error: {e}</h1></div>", background="#1e2227", highlightthickness=1, highlightbackground='black'))
+        htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Error: {e}</h1></div>")
 
 def search(x):
     url=urle.get()
