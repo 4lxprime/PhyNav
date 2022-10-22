@@ -41,8 +41,8 @@ def app_time():
 
 def gets(url, name):
     headers = {
-    'User-Agent': 'PhySearch 1.0',
-    'From': 'idalxprime@gmail.com',
+    'User-Agent': 'PhyNav 1.0',
+    'From': '',
     'Cookie':'CONSENT=YES+cb.20210418-17-p0.it+FX+917; '
 }
     htmlFR.load_html(f"<div style='background: white; color: #23272e; text-align: center;'><br><h1>Waiting</h1><br><p>for <a href='{url}'>{url}</a></p></div>")
@@ -86,15 +86,15 @@ root=Tk()
 
 root.geometry("800x500")
 root.minsize(800, 400)
-root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}")
+root.title(f"  PhyNav 1.0  |  {time.asctime(time.localtime())}")
 
 def act_title():
     while 1:
         if len(actual_page)!=1:
-            root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}")
+            root.title(f"  PhyNav 1.0  |  {time.asctime(time.localtime())}")
         else:
             for i in actual_page:
-                root.title(f"  PhySearch 1.0  |  {time.asctime(time.localtime())}  |  {i}")
+                root.title(f"  PhyNav 1.0  |  {time.asctime(time.localtime())}  |  {i}")
         time.sleep(1)
 
 ttl=threading.Thread(target=act_title)
@@ -248,6 +248,7 @@ def act():
         canvas.coords(UrlInput, root.winfo_width()/2, 40)
         canvas.coords(plusZ, root.winfo_width()/2-320, 40)
         canvas.coords(plusUZ, root.winfo_width()/2-370, 40)
+        canvas.coords(btnJ, root.winfo_width()/2+320, 40)
         
     
 t=threading.Thread(target=act)
