@@ -71,5 +71,4 @@ def search(x):
 <img alt="Repo stars" src="https://img.shields.io/github/stars/4lxprime/PhyNav">
 <img alt="Top language" src="https://img.shields.io/github/languages/top/4lxprime/PhyNav">
 <img alt="Last commit" src="https://img.shields.io/github/last-commit/4lxprime/PhyNav">
-<img src="https://sonarcloud.io/api/project_badges/measure?project=4lxprime/PhyNav&metric=ncloc">
 <img src="https://img.shields.io/github/downloads/4lxprime/PhyNav/total?color=%23daff00&style=flat-square">
